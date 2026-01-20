@@ -50,6 +50,18 @@ const server = http.createServer(async (req, res) => {
            const links = await loadlinks()
             res.writeHead(200, { "Content-Type": "application/json" });
             res.end(JSON.stringify(links))
+    }else{
+        const links = await loadlinks()
+        const shortCode = req.url.slice(1)
+
+        if(links[shortCode]){
+            res.writeHead(302, {location: links[shortCode]});
+            return res.end()
+        }
+
+         res.writeHead(404, { "Content-Type": "application/text" });
+            return res.end("Shortened URL is not found")
+
     }
   }
 
