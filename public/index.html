@@ -28,6 +28,17 @@
       </ul>
     </div>
 
-    <script src="index.js"></script>
+    <script>
+        document.getElementById("shortener-form").addEventListener("submit", (event) => {
+    event.preventDefault()
+
+    const formData = new FormData(event.target)
+    
+    const url = formData.get("url")
+    const shortCode = formData.get("short-code")
+
+    console.log(url, shortCode)
+})
+    </script>
   </body>
 </html>
