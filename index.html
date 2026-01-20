@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="container">
+      <h2>URL Shortener</h2>
+
+      <form id="shortener-form">
+        <div class="form-input">
+          <label for="url">Enter URL:</label><br>
+          <input type="url" name="url" id="url" />
+        </div>
+        <div class="form-input">
+          <label for="short-code">Enter Short Code:</label><br>
+          <input type="text" name="short-code" id="short-code" />
+        </div>
+        <button type="submit">Shorten</button>
+      </form>
+
+      <h3>Shortened URLs</h3>
+      <ul class="shortened-urls">
+
+      </ul>
+    </div>
+
+    <script src="index.js"></script>
+  </body>
+</html>
