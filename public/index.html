@@ -27,20 +27,19 @@
     </div>
 
     <script>
+      const fetchSortenedUrl = async () => {
+        const response = await fetch("/links");
+        const links = await response.json();
 
-      const fetchSortenedUrl = async() => {
-        const response = await fetch("/links")
-        const links = await response.json()
+        const list = document.getElementById("shortened-urls");
+        list.innerHTML = "";
 
-        const list = document.getElementById("shortened-urls")
-        list.innerHTML = ""
-
-            for (const [shortCode, url] of Object.entries(links)) {
-          const li = document.createElement("li")
-          li.innerHTML = `<a href="/${shortCode}" target="_blank">${window.location.origin}/${shortCode}</a> - ${url}`
-          list.appendChild(li)
-      }
-      }
+        for (const [shortCode, url] of Object.entries(links)) {
+          const li = document.createElement("li");
+          li.innerHTML = `<a href="/${shortCode}" target="_blank">${window.location.origin}/${shortCode}</a> - ${url}`;
+          list.appendChild(li);
+        }
+      };
 
       document
         .getElementById("shortener-form")
@@ -55,14 +54,14 @@
           try {
             const response = await fetch("/shorten", {
               method: "POST",
-              headers: {"Content-Type": "application/json"},
+              headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ url, shortCode }),
             });
 
             if (response.ok) {
-                      fetchSortenedUrl()
+              fetchSortenedUrl();
               alert("Form submission successfull.");
-              event.target.reset()
+              event.target.reset();
             } else {
               const errorMessage = await response.text();
               alert(errorMessage);
@@ -72,7 +71,7 @@
           }
         });
 
-        fetchSortenedUrl()
+      fetchSortenedUrl();
     </script>
   </body>
 </html>
