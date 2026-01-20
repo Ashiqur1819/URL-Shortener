@@ -96,3 +96,38 @@ button:hover {
   font-size: 14px;
   margin-bottom: 8px;
 }
+
+/*  */
+
+/* Shortened URLs container */
+#shortened-urls {
+  list-style: none;
+  margin-top: 15px;
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+/* Each list item */
+#shortened-urls li {
+  background: #f9fafb;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border-left: 4px solid #3b82f6;
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-all;
+  color: #374151;
+}
+
+/* Short URL */
+#shortened-urls li a {
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+#shortened-urls li a:hover {
+  text-decoration: underline;
+}

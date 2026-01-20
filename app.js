@@ -46,6 +46,10 @@ const server = http.createServer(async (req, res) => {
     } else if (req.url === "/style.css") {
       const filePath = path.join("public", "style.css");
       serveFile(res, filePath, "text/css");
+    }else if(req.url === "/links"){
+           const links = await loadlinks()
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify(links))
     }
   }
 
