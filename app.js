@@ -1,8 +1,10 @@
 import http from "http";
 import fs from "fs/promises";
 import path from "path";
+import crypto from "crypto"
 
 const port = 3000;
+const dataFile = path.join("data", "links.json")
 
 const serveFile = async (res, filePath, contentType) => {
   try {
@@ -15,6 +17,27 @@ const serveFile = async (res, filePath, contentType) => {
   }
 };
 
+const loadlinks = async () => {
+    try {
+        const data = await fs.readFile(dataFile, "utf-8")
+    return JSON.parse(data)
+    } catch (error) {
+        if(error.code === "ENOENT"){
+            await fs.writeFile(dataFile, JSON.stringify({}))
+            return {}
+        }
+        throw error
+    }
+}
+
+const saveLinks = async (links) => {
+    try {
+        await fs.writeFile(dataFile, JSON.stringify(links))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 const server = http.createServer(async (req, res) => {
   if (req.method === "GET") {
     if (req.url === "/") {
@@ -24,6 +47,37 @@ const server = http.createServer(async (req, res) => {
       const filePath = path.join("public", "style.css");
       serveFile(res, filePath, "text/css");
     }
+  }
+
+  if(req.method === "POST" && req.url === "/shorten"){
+
+    const links = await loadlinks()
+
+    let body = ""
+    req.on("data", (chunk) => {
+        body += chunk
+    })
+    req.on("end", async() => {
+        const {url, shortCode} = JSON.parse(body)
+
+        if(!url){
+             res.writeHead(400, { "Content-Type": "text/plain" });
+    res.end("URL is required.");
+        }
+
+        const finalShortCode = shortCode || crypto.randomBytes(4).toString("hex")
+
+        if(links[finalShortCode]){
+            res.writeHead(404, { "Content-Type": "text/plain" });
+            res.end("Short code already exists. Choose another one.");
+        }
+
+        links[finalShortCode] = url
+
+        await saveLinks(links)
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({success: true, shortCode : finalShortCode}));
+    })
   }
 });
 

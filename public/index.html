@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>URL Shortener</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="container">
@@ -12,33 +12,48 @@
 
       <form id="shortener-form">
         <div class="form-input">
-          <label for="url">Enter URL:</label><br>
+          <label for="url">Enter URL:</label><br />
           <input type="url" name="url" id="url" />
         </div>
         <div class="form-input">
-          <label for="short-code">Enter Short Code:</label><br>
+          <label for="short-code">Enter Short Code:</label><br />
           <input type="text" name="short-code" id="short-code" />
         </div>
         <button type="submit">Shorten</button>
       </form>
 
       <h3>Shortened URLs</h3>
-      <ul class="shortened-urls">
-
-      </ul>
+      <ul class="shortened-urls"></ul>
     </div>
 
     <script>
-        document.getElementById("shortener-form").addEventListener("submit", (event) => {
-    event.preventDefault()
+      document
+        .getElementById("shortener-form")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
 
-    const formData = new FormData(event.target)
-    
-    const url = formData.get("url")
-    const shortCode = formData.get("short-code")
+          const formData = new FormData(event.target);
 
-    console.log(url, shortCode)
-})
+          const url = formData.get("url");
+          const shortCode = formData.get("short-code");
+
+          try {
+            const response = await fetch("/shorten", {
+              method: "POST",
+              headers: {"Content-Type": "application/json"},
+              body: JSON.stringify({ url, shortCode }),
+            });
+
+            if (response.ok) {
+              alert("Form submission successfull.");
+            } else {
+              const errorMessage = await response.text();
+              alert(errorMessage);
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        });
     </script>
   </body>
 </html>
